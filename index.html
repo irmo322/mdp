@@ -1,84 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Master Password &mdash; Secure your life, forget your passwords.</title>
-        <meta content="Master Password is an ingenious password solution that makes your passwords truly impossible to lose." />
-        <meta name="apple-itunes-app" content="app-id=510296984" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/main.css?2">
+        <title>Spectre Web</title>
+        <meta name="description" content="Password manager and secure identity platform. Spectre is a free and offline password cipher." />
+        <meta name="keywords" content="password manager,password generator,passwords,free,secure,strong,random,online,offline,privacy,web" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="theme-color" content="#3E8989">
+        <meta property="og:image" content="images/product/environment/spectre-dark-desk.jpg">
+        <meta name="apple-itunes-app" content="app-id=1526402806" />
+        <meta name="twitter:card" content="app">
+        <meta name="twitter:app:id:iphone" content="1526402806">
+        <meta name="twitter:app:name:iphone" content="Spectre">
+        <meta name="twitter:app:url:iphone" content="spectre://">
+        <meta name="author" content="Maarten Billemont">
+        <link rel="author" href="https://lhunath.com">
+        <link rel="icon" href="images/spectre.png">
+        <link rel="stylesheet" href="plugins/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="plugins/fontawesome/css/all.min.css">
+        <link rel="stylesheet" href="css/base.css" media="screen">
+        <link rel="stylesheet" href="css/spectre-web.css" media="screen">
+        <script defer src="plugins/jquery/jquery.min.js"></script>
     </head>
-    <body>
-        <header>
-            <p><strong>BETA</strong> - This site may not yet work on your browser.<br>
-            Passwords are generated locally, your master password is not sent to any server.  See <a href="https://gitlab.com/MasterPassword/MasterPassword/tree/master/platform-independent/web">the source</a>.</p>
-            <span id="error"></span>
-        </header>
-        <section id="identity" class="active"><form action="#">
-            <h1>Identity</h1>
-            <p>
-                <input id="userName" type="text" placeholder="Your Full Name" /><br>
-                <input id="masterPassword" type="password" placeholder="Your Master Password" /><br>
-                <input type="submit" value="⏎" /><br>
-                <input type="image" src="img/spinner.svg" />
-                <select id="version" class="minimal">
-                    <option value="0">V0</option>
-                    <option value="1">V1</option>
-                    <option value="2">V2</option>
-                    <option value="3" selected>V3</option>
-                </select>
-            </p>
-        </form></section>
 
-        <section id="site">
-            <h1>Site</h1>
-            <p>
-                <input id="siteName" type="text" placeholder="Site Name (eg. apple.com)" /><br>
-                <span class="small">
-                    <input id="siteCounter" type="number" placeholder="Site Counter" min="1" max="100" value="1" class="half" />
-                    <select id="siteType" class="half">
-                        <option value="pin">PIN</option>
-                        <option value="short">Short</option>
-                        <option value="basic">Basic</option>
-                        <option value="medium">Medium</option>
-                        <option value="long" selected>Long</option>
-                        <option value="maximum">Maximum</option>
-                        <option value="name">Name</option>
-                        <option value="phrase">Phrase</option>
-                    </select>
-                </span><br>
-                <h2 id="sitePassword" title="Your password is ..."></h2><br>
-                <input id="logout" type="submit" value="⎋" />
-                <input type="image" src="img/spinner.svg" />
-            </p>
+    <body>
+
+        <section id="application">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div id="user" class="col-lg-6 text-center box">
+                        <i class="fa-duotone fa-user-circle"></i>
+                        <hr>
+
+                        <form>
+                            <p>
+                                <label id="userName">
+                                    <i class="fa-duotone fa-fw fa-user-large"></i>
+                                    Your Full Name
+                                    <input type="text" placeholder="eg. Robert Lee Mitchell" autocomplete="name">
+                                </label>
+                            </p>
+
+                            <p>
+                                <label id="userSecret">
+                                    <i class="fa-duotone fa-fw fa-user-lock"></i>
+                                    Your Spectre Secret
+                                    <i class="fa-duotone fa-fw fa-galaxy fa-spin" style="display: none;"></i>
+                                    <input type="password" placeholder="eg. banana colored duckling" autocomplete="current-password">
+                                </label>
+                            </p>
+
+                            <p>
+                                <label id="algorithmVersion">
+                                    <i class="fa-duotone fa-fw fa-rectangle-vertical-history"></i>
+                                    Algorithm Version
+                                    <select>
+                                        <option value="0">V0 (2012:03)</option>
+                                        <option value="1">V1 (2012:07)</option>
+                                        <option value="2">V2 (2014:09)</option>
+                                        <option value="3" selected>V3 (2015:01)</option>
+                                    </select>
+                                </label>
+                            </p>
+                        </form>
+
+                        <hr>
+
+                        <p class="info"></p>
+                        <p class="error"></p>
+
+                        <p>
+                            <button type="button" id="signin" title="" data-bs-original-title="Copy Password">
+                                <i class="fa-duotone fa-fw fa-2x fa-right-to-bracket"></i><br>
+                                Sign In
+                            </button>
+                        </p>
+
+                        <p class="caption">Your information remains 100% offline.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div id="site" class="col-lg-6 text-center box">
+                        <i class="fa-duotone fa-globe"></i>
+                        <hr>
+
+                        <form>
+                        <p>
+                            <label id="siteName">
+                                <i class="fa-duotone fa-fw fa-globe"></i>
+                                Site Domain
+                                <input type="text" placeholder="eg. twitter.com">
+                            </label>
+                        </p>
+
+                        <p>
+                            <label id="siteCounter">
+                                <i class="fa-duotone fa-fw fa-rectangle-vertical-history"></i>
+                                Site Counter
+                                <input type="number" placeholder="1" min="1" max="100" value="1" class="half" />
+                            </label>
+                        </p>
+
+                        <p>
+                            <label id="siteType">
+                                <i class="fa-duotone fa-fw fa-rectangle-vertical-history"></i>
+                                Password Type
+                                <select>
+                                    <option value="pin">PIN</option>
+                                    <option value="short">Short</option>
+                                    <option value="basic">Basic</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="long" selected>Long</option>
+                                    <option value="maximum">Maximum</option>
+                                    <option value="name">Name</option>
+                                    <option value="phrase">Phrase</option>
+                                </select>
+                            </label>
+                        </p>
+
+                        <p>
+                            <label id="sitePassword">
+                                <i class="fa-duotone fa-fw" style="background: url('images/spectre-light-glyph.svg') no-repeat center/contain"></i>
+                                Site Password
+                                <i class="fa-duotone fa-fw fa-galaxy fa-spin" style="display: none;"></i>
+                                <button type="button" class="fa-solid fa-copy" title="" data-bs-original-title="Copy Password">
+                                    <input class="code" value="PozoLalv0_Yelo" readonly="">
+                                </button>
+                            </label>
+                        </p>
+                        </form>
+
+                        <p class="info"></p>
+                        <p class="error"></p>
+
+                        <hr>
+
+                        <p>
+                            <button type="button" id="signout" title="" data-bs-original-title="Copy Password">
+                                <i class="fa-duotone fa-fw fa-2x fa-right-from-bracket"></i><br>
+                                Sign Out
+                            </button>
+                        </p>
+
+                        <p class="caption">Your information remains 100% offline.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <footer>
-        <p>This page was made possible thanks to <a href="https://tomthorogood.co.uk/" title="Tom Thorogood">tmthrgd</a>'s <a href="https://github.com/tmthrgd/mpw-js">mpw-js</a>.<br>
-        <em><a href="https://masterpassword.app">Master Password</a> is a security product and algorithm by <a href="http://www.lhunath.com" title="Maarten Billemont">Maarten Billemont</a>, <a href="http://www.lyndir.com">Lyndir</a> (&copy; 2011-2014).</em><br>
-        Usage implies agreement with our <a href="https://masterpassword.app/privacy.html">privacy policy and disclaimer</a>.</p>
+        <footer id="footer">
+            <div class="container">
+                <div class="row wow fadeInUp" data-wow-duration="500ms">
+                    <div class="col-12 text-center">
+                        <div class="copyright">
+                            <a href="https://spectre.app/">
+                                <img src="images/spectre-light.png" alt="Spectre: Passwords, Privacy-first" height="42">
+                            </a>
+                            <br>
+                            <p>Copyright © 2011 <a href="https://lhunath.com">Maarten Billemont</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </footer>
 
         <!-- Scripts -->
-        <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
-        <!-- TODO: Add SDKs for Firebase products that you want to use
-             https://firebase.google.com/docs/web/setup#config-web-app -->
-        <script>
-          firebase.initializeApp({
-            apiKey: "",
-            authDomain: "master-password-e13f6.firebaseapp.com",
-            databaseURL: "https://master-password-e13f6.firebaseio.com",
-            projectId: "master-password-e13f6",
-            storageBucket: "master-password-e13f6.appspot.com",
-            messagingSenderId: "1053318116001",
-            appId: "1:1053318116001:web:a1693560a8e51727"
-          });
-        </script>
-        <script>document.write('<script src="js/vendor/jquery-2.1.1.min.js"><\/script>')</script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-2.1.1.js"><\/script>')</script>
-        <script src="js/dependencies.js?4"></script>
-        <script src="js/main.js?3"></script>
+        <script defer src="plugins/bootstrap/bootstrap.bundle.min.js"></script>
+        <script defer src="js/spectre/spectre-types.js"></script>
+        <script defer src="js/spectre/spectre-service.js"></script>
+        <script defer src="js/main.js"></script>
     </body>
 
 </html>
