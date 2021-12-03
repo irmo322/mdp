@@ -15,6 +15,7 @@
 
 #application .container {
     position: absolute;
+    padding: 2em;
 }
 
 #application .container div[data-active="false"] {
@@ -36,10 +37,4 @@
     right: 0;
     bottom: 0.2em;
     left: 0;
-}
-
-@media (max-width: 768px) {
-    #application .box .caption {
-        bottom: -0.2em;
-    }
 }
