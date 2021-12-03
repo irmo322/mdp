@@ -18,11 +18,11 @@
     padding: 2em;
 }
 
-#application .container div[data-active="false"] {
+#application div[data-active="false"] {
     display: none;
 }
 
-#application .container div[data-active="true"] {
+#application div[data-active="true"] {
     display: block;
     transition: all .38s ease-in 0s;
 }
