@@ -1,18 +1,17 @@
 function spinnerBusy(element, busy) {
-    let spin = Math.max(0, (element.data("spin") || 0) + (busy ? 1 : -1));
-    element.data("spin", spin);
+    element.data("spin", busy);
 
-    if (spin) {
+    if (busy) {
         element.finish().fadeIn();
     } else {
         element.finish().fadeOut();
     }
 }
 
-$(function () {
-    let signInButton = $('#signin');
+$(() => {
     let signOutButton = $('#signout');
     let user = $('#user');
+    let userForm = user.find('form');
     let userName = user.find('#userName');
     let userNameInput = userName.find('input');
     let userSecret = user.find('#userSecret');
@@ -23,6 +22,7 @@ $(function () {
     let userMessage = user.find('p.info');
     let userError = user.find('p.error');
     let site = $('#site');
+    let siteForm = site.find('form');
     let siteName = site.find('#siteName');
     let siteNameInput = siteName.find('input');
     let sitePassword = site.find('#sitePassword');
@@ -32,50 +32,49 @@ $(function () {
     let siteMessage = site.find('p.info');
     let siteError = site.find('p.error');
 
-    signInButton.on('click', function () {
-        spinnerBusy(userSecretSpinner, true);
-
+    userForm.on('submit', (e) => {
+        e.preventDefault()
         spectre.authenticate(userNameInput[0].value, userSecretInput[0].value, userAlgorithmInput[0].value)
     });
+    siteForm.on('submit', (e) => {
+        e.preventDefault()
+        sitePasswordInput.select()
+        if (navigator.clipboard.writeText(sitePasswordInput[0].value) || document.execCommand('copy')) {
+            sitePasswordButton.attr("title", "Copied!").tooltip("_fixTitle").tooltip("show");
+            setTimeout(() => {
+                sitePasswordButton.tooltip("hide").attr("title", "Copy Password").tooltip("_fixTitle");
+            }, 1000);
+        }
+    });
 
-    signOutButton.on('click', function () {
-        spinnerBusy(userSecretSpinner, true);
-
+    signOutButton.on('click', () => {
         spectre.invalidate()
     });
 
-    siteName.on('input', function () {
-        spinnerBusy(sitePasswordSpinner, true);
-
+    siteName.on('input', () => {
         spectre.password(siteNameInput[0].value)
     });
     
     function updateView() {
-        if (!spectre.authenticated) {
-            userAlgorithmInput.val(spectre.algorithm.current);
-            siteNameInput.val(null);
-        }
+        spinnerBusy(userSecretSpinner, spectre.operations.user.pending);
+        spinnerBusy(sitePasswordSpinner, spectre.operations.site.pending);
 
-        user.attr("data-active", !spectre.authenticated);
-        site.attr("data-active", spectre.authenticated);
-
-        userNameInput.val(spectre.userName);
+        userNameInput.val(spectre.operations.user.userName);
         userSecretInput.val(null);
         sitePasswordInput.val(spectre.result(siteNameInput[0].value));
+
+        if (spectre.operations.user.authenticated) {
+            user.attr("data-active", false);
+            site.attr("data-active", true);
+            siteNameInput.focus()
+        } else {
+            user.attr("data-active", true);
+            site.attr("data-active", false);
+            userAlgorithmInput.val(spectre.algorithm.current);
+            siteNameInput.val(null);
+            userNameInput.focus()
+        }
     }
     spectre.observers.push(updateView);
     updateView()
-
-    sitePasswordButton.on('click', function () {
-        sitePasswordInput.select()
-        document.execCommand('copy');
-
-        sitePasswordButton.attr("title", "Copied!").tooltip("_fixTitle").tooltip("show");
-        setTimeout(function () {
-            sitePasswordButton.tooltip("hide").attr("title", "Copy Password").tooltip("_fixTitle");
-        }, 1000);
-    });
-
-    spinnerBusy(userSecretSpinner, false);
-    spinnerBusy(sitePasswordSpinner, false);
 });

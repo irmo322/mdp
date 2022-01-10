@@ -37,7 +37,7 @@
                                 <label id="userName">
                                     <i class="fa-duotone fa-fw fa-user-large"></i>
                                     Your Full Name
-                                    <input type="text" placeholder="eg. Robert Lee Mitchell" autocomplete="name">
+                                    <input type="text" placeholder="eg. Robert Lee Mitchell" autocomplete="username">
                                 </label>
                             </p>
 
@@ -45,7 +45,7 @@
                                 <label id="userSecret">
                                     <i class="fa-duotone fa-fw fa-user-lock"></i>
                                     Your Spectre Secret
-                                    <i class="fa-duotone fa-fw fa-galaxy fa-spin" style="display: none;"></i>
+                                    <i class="fa-duotone fa-fw fa-galaxy fa-spin"></i>
                                     <input type="password" placeholder="eg. banana colored duckling" autocomplete="current-password">
                                 </label>
                             </p>
@@ -62,19 +62,19 @@
                                     </select>
                                 </label>
                             </p>
+
+                            <hr>
+    
+                            <p class="info"></p>
+                            <p class="error"></p>
+    
+                            <p>
+                                <button type="submit" id="signin">
+                                    <i class="fa-duotone fa-fw fa-2x fa-right-to-bracket"></i><br>
+                                    Sign In
+                                </button>
+                            </p>
                         </form>
-
-                        <hr>
-
-                        <p class="info"></p>
-                        <p class="error"></p>
-
-                        <p>
-                            <button type="button" id="signin" title="" data-bs-original-title="Copy Password">
-                                <i class="fa-duotone fa-fw fa-2x fa-right-to-bracket"></i><br>
-                                Sign In
-                            </button>
-                        </p>
 
                         <p class="caption">Your information remains 100% offline.</p>
                     </div>
@@ -88,49 +88,49 @@
                         <hr>
 
                         <form>
-                        <p>
-                            <label id="siteName">
-                                <i class="fa-duotone fa-fw fa-globe"></i>
-                                Site Domain
-                                <input type="text" placeholder="eg. twitter.com">
-                            </label>
-                        </p>
-
-                        <p>
-                            <label id="siteCounter">
-                                <i class="fa-duotone fa-fw fa-rectangle-vertical-history"></i>
-                                Site Counter
-                                <input type="number" placeholder="1" min="1" max="100" value="1" class="half" />
-                            </label>
-                        </p>
-
-                        <p>
-                            <label id="siteType">
-                                <i class="fa-duotone fa-fw fa-rectangle-vertical-history"></i>
-                                Password Type
-                                <select>
-                                    <option value="pin">PIN</option>
-                                    <option value="short">Short</option>
-                                    <option value="basic">Basic</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="long" selected>Long</option>
-                                    <option value="maximum">Maximum</option>
-                                    <option value="name">Name</option>
-                                    <option value="phrase">Phrase</option>
-                                </select>
-                            </label>
-                        </p>
-
-                        <p>
-                            <label id="sitePassword">
-                                <i class="fa-duotone fa-fw" style="background: url('images/spectre-light-glyph.svg') no-repeat center/contain"></i>
-                                Site Password
-                                <i class="fa-duotone fa-fw fa-galaxy fa-spin" style="display: none;"></i>
-                                <button type="button" class="fa-solid fa-copy" title="" data-bs-original-title="Copy Password">
-                                    <input class="code" value="PozoLalv0_Yelo" readonly="">
-                                </button>
-                            </label>
-                        </p>
+                            <p>
+                                <label id="siteName">
+                                    <i class="fa-duotone fa-fw fa-globe"></i>
+                                    Site Domain
+                                    <input type="text" placeholder="eg. twitter.com">
+                                </label>
+                            </p>
+    
+                            <p>
+                                <label id="siteCounter">
+                                    <i class="fa-duotone fa-fw fa-rectangle-vertical-history"></i>
+                                    Site Counter
+                                    <input type="number" placeholder="1" min="1" max="100" value="1" class="half" />
+                                </label>
+                            </p>
+    
+                            <p>
+                                <label id="siteType">
+                                    <i class="fa-duotone fa-fw fa-rectangle-vertical-history"></i>
+                                    Password Type
+                                    <select>
+                                        <option value="pin">PIN</option>
+                                        <option value="short">Short</option>
+                                        <option value="basic">Basic</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="long" selected>Long</option>
+                                        <option value="maximum">Maximum</option>
+                                        <option value="name">Name</option>
+                                        <option value="phrase">Phrase</option>
+                                    </select>
+                                </label>
+                            </p>
+    
+                            <p>
+                                <label id="sitePassword">
+                                    <i class="fa-duotone fa-fw" style="background: url('images/spectre-light-glyph.svg') no-repeat center/contain"></i>
+                                    Site Password
+                                    <i class="fa-duotone fa-fw fa-galaxy fa-spin"></i>
+                                    <button type="submit" class="fa-solid fa-copy">
+                                        <input class="code" value="PozoLalv0_Yelo" readonly="">
+                                    </button>
+                                </label>
+                            </p>
                         </form>
 
                         <p class="info"></p>
@@ -139,7 +139,7 @@
                         <hr>
 
                         <p>
-                            <button type="button" id="signout" title="" data-bs-original-title="Copy Password">
+                            <button type="submit" id="signout">
                                 <i class="fa-duotone fa-fw fa-2x fa-right-from-bracket"></i><br>
                                 Sign Out
                             </button>

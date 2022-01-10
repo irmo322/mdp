@@ -23,20 +23,43 @@
  * `invalidate`, `authenticate`, `password`, `login` & `answer`: They operate on the Spectre identity managed through the service.
  */
 
-spectre.userName = null;
-spectre.identicon = null;
-spectre.authenticated = false;
-spectre.site = {};
 spectre.observers = [];
+spectre.operations = {
+    user: {
+        pending: false,
+        error: null,
+        cause: null,
+        userName: null,
+        identicon: null,
+        authenticated: false,
+    },
+    site: {
+        pending: false,
+        error: null,
+        cause: null,
+        result: [],
+    }
+};
 
 spectre.invalidate = Object.freeze(() => {
+    spectre.operations.user.pending = true;
+    spectre.operations.site.pending = true;
+    for (const observer of spectre.observers) {
+        observer()
+    }
+
     spectre.worker.postMessage({
-        "userName": spectre.userName,
+        "userName": spectre.operations.user.userName,
         "invalidate": true,
     });
 });
 spectre.authenticate = Object.freeze((userName, userSecret, algorithmVersion) => {
-    spectre.userName = userName;
+    spectre.operations.user.pending = true;
+    spectre.operations.user.userName = userName;
+    for (const observer of spectre.observers) {
+        observer()
+    }
+
     spectre.worker.postMessage({
         "userName": userName,
         "userSecret": userSecret,
@@ -44,8 +67,13 @@ spectre.authenticate = Object.freeze((userName, userSecret, algorithmVersion) =>
     });
 });
 spectre.password = Object.freeze((siteName, resultType, keyCounter, keyContext) => {
+    spectre.operations.site.pending = true;
+    for (const observer of spectre.observers) {
+        observer()
+    }
+
     spectre.worker.postMessage({
-        "userName": spectre.userName,
+        "userName": spectre.operations.user.userName,
         "siteName": siteName,
         "resultType": resultType,
         "keyCounter": keyCounter,
@@ -54,8 +82,13 @@ spectre.password = Object.freeze((siteName, resultType, keyCounter, keyContext) 
     });
 });
 spectre.login = Object.freeze((siteName, resultType, keyCounter, keyContext) => {
+    spectre.operations.site.pending = true;
+    for (const observer of spectre.observers) {
+        observer()
+    }
+
     spectre.worker.postMessage({
-        "userName": spectre.userName,
+        "userName": spectre.operations.user.userName,
         "siteName": siteName,
         "resultType": resultType,
         "keyCounter": keyCounter,
@@ -64,8 +97,13 @@ spectre.login = Object.freeze((siteName, resultType, keyCounter, keyContext) => 
     });
 });
 spectre.answer = Object.freeze((siteName, resultType, keyCounter, keyContext) => {
+    spectre.operations.site.pending = true;
+    for (const observer of spectre.observers) {
+        observer()
+    }
+
     spectre.worker.postMessage({
-        "userName": spectre.userName,
+        "userName": spectre.operations.user.userName,
         "siteName": siteName,
         "resultType": resultType,
         "keyCounter": keyCounter,
@@ -74,7 +112,7 @@ spectre.answer = Object.freeze((siteName, resultType, keyCounter, keyContext) =>
     });
 });
 spectre.result = Object.freeze((siteName, keyPurpose = spectre.purpose.authentication, keyContext = null) => {
-    return ((spectre.site[siteName || ""] || {})[keyPurpose || ""] || {})[keyContext || ""]
+    return ((spectre.operations.site.result[siteName || ""] || {})[keyPurpose || ""] || {})[keyContext || ""]
 });
 
 function newWorkerFromURL(workerURL) {
@@ -109,24 +147,37 @@ function mergeInto(host, ...objects) {
 
 spectre.worker = newWorkerFromURL("js/spectre/spectre-worker.js");
 spectre.worker.onmessage = (msg) => {
-    if (msg.data.userName !== spectre.userName)
+    console.trace(`[spectre]: onmessage: ${JSON.stringify(msg.data)})`);
+    if (msg.data.userName !== spectre.operations.user.userName)
         return;
 
     switch (msg.data.operation) {
         case 'invalidate':
-            spectre.userName = null;
-            spectre.identicon = null;
-            spectre.authenticated = false;
-            spectre.site = [];
+            spectre.operations.user.userName = null;
+            spectre.operations.user.identicon = null;
+            spectre.operations.user.pending = false;
+            spectre.operations.user.authenticated = false;
+            spectre.operations.user.error = null;
+            spectre.operations.user.cause = null;
+            spectre.operations.site.pending = false;
+            spectre.operations.site.error = null;
+            spectre.operations.site.cause = null;
+            spectre.operations.site.result = [];
             break;
         case 'identicon':
-            spectre.identicon = msg.data.userIdenticon;
+            spectre.operations.user.identicon = msg.data.userIdenticon;
             break;
         case 'user':
-            spectre.authenticated = true;
+            spectre.operations.user.pending = false;
+            spectre.operations.user.authenticated = msg.data.error === undefined;
+            spectre.operations.user.error = msg.data.error;
+            spectre.operations.user.cause = msg.data.cause;
             break;
         case 'site':
-            mergeInto(spectre.site, {
+            spectre.operations.site.pending = false;
+            spectre.operations.site.error = msg.data.error;
+            spectre.operations.site.cause = msg.data.cause;
+            mergeInto(spectre.operations.site.result, {
                 [msg.data.siteName || ""]: {
                     [msg.data.keyPurpose || ""]: {
                         [msg.data.keyContext || ""]: msg.data.siteResult

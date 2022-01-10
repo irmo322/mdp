@@ -45,6 +45,18 @@ importScripts(new URL("js/spectre/spectre-algorithm.js", baseURI).href);
  *      The context parameter to pass into the result type for scoping the result token. [site]
  *  - invalidate:
  *      If set, wipe the currently authenticated user identity from memory. [invalidate]
+ *      
+ *  | Input > Operation | invalidate | identicon | user     | site     |
+ *  |-------------------|------------|-----------|----------|----------|
+ *  | userName          | optional   | required  | required | optional |
+ *  | userSecret        |            | required  | required | optional |
+ *  | algorithmVersion  |            | required  | required | optional |
+ *  | siteName          |            |           |          | required |
+ *  | resultType        |            |           |          | required | 
+ *  | keyCounter        |            |           |          | required |
+ *  | keyPurpose        |            |           |          | required |
+ *  | keyContext        |            |           |          | required |
+ *  | invalidate        | required   |           |          |          |
  *
  * The worker will perform every operation for which the received message has input parameters present.
  * Once an operation is completed, the worker will post back the operation's results using the following outputs:
