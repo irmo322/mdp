@@ -2,6 +2,26 @@
   SECTION: HERO
  *================================================================*/
 
+.banner {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 0.5em;
+    font-size: smaller;
+    z-index: 1;
+}
+
+.banner .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+.banner .container > * {
+    margin: 0;
+}
+
 #application {
     position: relative;
     display: flex;
