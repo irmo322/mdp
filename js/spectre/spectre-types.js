@@ -99,6 +99,19 @@ spectre.resultType = Object.freeze({
     defaultLogin: spectre.resultType.templateName,
     defaultAnswer: spectre.resultType.templatePhrase,
 });
+spectre.resultName = Object.freeze({
+    [spectre.resultType.templateMaximum]: "Maximum",
+    [spectre.resultType.templateLong]: "Long",
+    [spectre.resultType.templateMedium]: "Medium",
+    [spectre.resultType.templateShort]: "Short",
+    [spectre.resultType.templateBasic]: "Basic",
+    [spectre.resultType.templatePIN]: "PIN",
+    [spectre.resultType.templateName]: "Name",
+    [spectre.resultType.templatePhrase]: "Phrase",
+    [spectre.resultType.statePersonal]: "Own",
+    [spectre.resultType.stateDevice]: "Device",
+    [spectre.resultType.deriveKey]: "Key",
+});
 spectre.counter = {
     /** Use a time-based counter value, resulting in a TOTP generator. */
     TOTP: 0,

@@ -25,6 +25,10 @@ $(() => {
     let siteForm = site.find('form');
     let siteName = site.find('#siteName');
     let siteNameInput = siteName.find('input');
+    let siteCounter = site.find('#siteCounter');
+    let siteCounterInput = siteCounter.find('input');
+    let siteType = site.find('#siteType');
+    let siteTypeInput = siteType.find('select');
     let sitePassword = site.find('#sitePassword');
     let sitePasswordSpinner = sitePassword.find('.fa-spin');
     let sitePasswordButton = sitePassword.find('button');
@@ -32,9 +36,16 @@ $(() => {
     let siteMessage = site.find('p.info');
     let siteError = site.find('p.error');
 
+    for (template in spectre.templates) {
+        let option = document.createElement('option');
+        option.text = spectre.resultName[template];
+        option.value = template;
+        siteTypeInput[0].add(option);
+    }
+
     userForm.on('submit', (e) => {
-        e.preventDefault()
-        spectre.authenticate(userNameInput[0].value, userSecretInput[0].value, userAlgorithmInput[0].value)
+        e.preventDefault();
+        spectre.authenticate(userNameInput[0].value, userSecretInput[0].value, userAlgorithmInput[0].value);
     });
     siteForm.on('submit', (e) => {
         e.preventDefault()
@@ -48,11 +59,16 @@ $(() => {
     });
 
     signOutButton.on('click', () => {
-        spectre.invalidate()
+        spectre.invalidate();
     });
-
-    siteName.on('input', () => {
-        spectre.password(siteNameInput[0].value)
+    siteNameInput.on('input', () => {
+        spectre.password(siteNameInput[0].value, siteTypeInput[0].value, siteCounterInput[0].value);
+    });
+    siteCounterInput.on('input', () => {
+        spectre.password(siteNameInput[0].value, siteTypeInput[0].value, siteCounterInput[0].value);
+    });
+    siteTypeInput.on('input', () => {
+        spectre.password(siteNameInput[0].value, siteTypeInput[0].value, siteCounterInput[0].value);
     });
     
     function updateView() {
