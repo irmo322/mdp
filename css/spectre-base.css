@@ -147,12 +147,12 @@ label:focus-within {
     color: var(--active-text);
 }
 
-form label:before {
-    content: "";
-    display: inline-block;
-    width: 1.5em;
-    text-align: end;
-}
+/*form label:before {*/
+/*    content: "";*/
+/*    display: inline-block;*/
+/*    width: 1.5em;*/
+/*    text-align: end;*/
+/*}*/
 
 form label {
     display: block;
@@ -178,7 +178,7 @@ form button:hover {
     background: var(--body-focus);
 }
 
-input, textarea, select, button, a.btn {
+input, textarea, select, button, a.btn, input[type=radio]+label {
     width: 100%;
     padding: 0.5em 1em;
     letter-spacing: 1px;
@@ -248,6 +248,18 @@ input, textarea, select, button, a, label, :target, :focus, :hover, :active {
 
 input[type=checkbox] {
     width: initial;
+}
+
+input[type=radio] {
+    display: none;
+}
+input[type=radio]+label {
+    display: inline;
+    background: var(--control-fill);
+}
+input[type=radio]:checked+label {
+    font-weight: bold;
+    background: var(--control-contrast);
 }
 
 li input[type=checkbox] {
