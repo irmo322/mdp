@@ -62,9 +62,13 @@ class SpectreUser {
         return this.result(userKey, siteName, resultType, keyCounter, spectre.purpose.recovery, keyContext);
     }
 
-    async result(siteName, resultType, keyCounter, keyPurpose, keyContext) {
+    // async result(siteName, resultType, keyCounter, keyPurpose, keyContext) {
+        // let userKey = await this.userKeyPromise
+        // return spectre.newSiteResult(userKey, siteName, resultType, keyCounter, keyPurpose, keyContext);
+    // }
+    async result(siteName, resultTemplate, keyCounter, keyPurpose, keyContext) {
         let userKey = await this.userKeyPromise
-        return spectre.newSiteResult(userKey, siteName, resultType, keyCounter, keyPurpose, keyContext);
+        return spectre.newSiteResult(userKey, siteName, resultTemplate, keyCounter, keyPurpose, keyContext);
     }
 
     invalidate() {
@@ -194,14 +198,16 @@ spectre.newSiteKey = Object.freeze(async(userKey, siteName, keyCounter = spectre
 });
 
 spectre.newSiteResult = Object.freeze(async(userKey, siteName,
-    resultType = spectre.resultType.defaultPassword, keyCounter = spectre.counter.default,
+    // resultType = spectre.resultType.defaultPassword, keyCounter = spectre.counter.default,
+    resultTemplate, keyCounter = spectre.counter.default,
     keyPurpose = spectre.purpose.authentication, keyContext = null) => {
-    console.trace(`[spectre]: result: ${siteName} (resultType=${resultType}, keyCounter=${keyCounter}, keyPurpose=${keyPurpose}, keyContext=${keyContext})`);
+    // console.trace(`[spectre]: result: ${siteName} (resultType=${resultType}, keyCounter=${keyCounter}, keyPurpose=${keyPurpose}, keyContext=${keyContext})`);
+    console.trace(`[spectre]: result: ${siteName} (resultTemplate=${resultTemplate}, keyCounter=${keyCounter}, keyPurpose=${keyPurpose}, keyContext=${keyContext})`);
 
-    let resultTemplates = spectre.templates[resultType]
-    if (!resultTemplates) {
-        throw new SpectreError("resultType", `Unsupported result template: ${resultType}.`);
-    }
+    // let resultTemplates = spectre.templates[resultType]
+    // if (!resultTemplates) {
+        // throw new SpectreError("resultType", `Unsupported result template: ${resultType}.`);
+    // }
 
     let siteKey = await spectre.newSiteKey(userKey, siteName, keyCounter, keyPurpose, keyContext)
     let siteKeyBytes = siteKey.keyData
@@ -215,7 +221,7 @@ spectre.newSiteResult = Object.freeze(async(userKey, siteName,
     }
 
     // key byte 0 selects the template from the available result templates.
-    let resultTemplate = resultTemplates[siteKeyBytes[0] % resultTemplates.length];
+    // let resultTemplate = resultTemplates[siteKeyBytes[0] % resultTemplates.length];
 
     // key byte 1+ selects a character from the template's character class.
     return resultTemplate.split("").map((characterClass, rT) => {

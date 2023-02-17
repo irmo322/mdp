@@ -58,3 +58,7 @@
     bottom: 0.2em;
     left: 0;
 }
+
+#siteNameInput:invalid {
+  border: red solid 3px;
+}

@@ -75,7 +75,8 @@ spectre.login = Object.freeze((siteName, resultType, keyCounter, keyContext) => 
 spectre.answer = Object.freeze((siteName, resultType, keyCounter, keyContext) => {
     spectre.request(siteName, resultType, keyCounter, spectre.purpose.recovery, keyContext);
 });
-spectre.request = Object.freeze((siteName, resultType, keyCounter, keyPurpose, keyContext) => {
+// spectre.request = Object.freeze((siteName, resultType, keyCounter, keyPurpose, keyContext) => {
+spectre.request = Object.freeze((siteName, resultTemplate, keyCounter, keyPurpose, keyContext) => {
     spectre.operations.site.pending = true;
     for (const observer of spectre.observers) {
         observer()
@@ -84,11 +85,15 @@ spectre.request = Object.freeze((siteName, resultType, keyCounter, keyPurpose, k
     spectre.worker.postMessage({
         "userName": spectre.operations.user.userName,
         "siteName": siteName,
-        "resultType": resultType,
+        "resultTemplate": resultTemplate,
         "keyCounter": keyCounter,
         "keyPurpose": keyPurpose,
         "keyContext": keyContext,
     });
+	spectre.operations.site.pending = false;
+    for (const observer of spectre.observers) {
+        observer()
+    }
 });
 spectre.result = Object.freeze((siteName, keyPurpose = spectre.purpose.authentication, keyContext = null) => {
     return ((spectre.operations.site.result[siteName || ""] || {})[keyPurpose || ""] || {})[keyContext || ""]

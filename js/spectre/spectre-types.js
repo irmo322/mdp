@@ -80,6 +80,8 @@ spectre.resultType = {
     templateBasic: 0x4 | spectre.class.template | spectre.feature.none,
     /** 21: 2798 */
     templatePIN: 0x5 | spectre.class.template | spectre.feature.none,
+	// /** 22: driven by siteName */
+	// templateCustom: 0x6 | spectre.class.template | spectre.feature.none,
     /** 30: birsujano */
     templateName: 0xE | spectre.class.template | spectre.feature.none,
     /** 31: bir yennoquce fefi */
@@ -106,6 +108,7 @@ spectre.resultName = Object.freeze({
     [spectre.resultType.templateShort]: "Short",
     [spectre.resultType.templateBasic]: "Basic",
     [spectre.resultType.templatePIN]: "PIN",
+    // [spectre.resultType.templateCustom]: "Custom",
     [spectre.resultType.templateName]: "Name",
     [spectre.resultType.templatePhrase]: "Phrase",
     [spectre.resultType.statePersonal]: "Own",
@@ -124,7 +127,8 @@ spectre.counter = Object.freeze({
     first: spectre.counter.TOTP,
     last: 4294967295,
 });
-spectre.templates = Object.freeze({
+// spectre.templates = Object.freeze({
+spectre.templates = {
     [spectre.resultType.templateMaximum]: [
         "anoxxxxxxxxxxxxxxxxx",
         "axxxxxxxxxxxxxxxxxno"
@@ -167,6 +171,7 @@ spectre.templates = Object.freeze({
     [spectre.resultType.templatePIN]: [
         "nnnn"
     ],
+    // [spectre.resultType.templateCustom]: [],
     [spectre.resultType.templateName]: [
         "cvccvcvcv"
     ],
@@ -175,18 +180,23 @@ spectre.templates = Object.freeze({
         "cvc cvccvcvcv cvcv",
         "cv cvccv cvc cvcvccv"
     ],
-});
+};
 spectre.characters = Object.freeze({
     V: "AEIOU",
     C: "BCDFGHJKLMNPQRSTVWXYZ",
     v: "aeiou",
     c: "bcdfghjklmnpqrstvwxyz",
-    A: "AEIOUBCDFGHJKLMNPQRSTVWXYZ",
-    a: "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz",
-    n: "0123456789",
-    o: "@&%?,=[]_:-+*$#!'^~;()/.",
-    x: "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&*()",
-    ' ': " "
+    // A: "AEIOUBCDFGHJKLMNPQRSTVWXYZ",
+    // a: "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz",
+    // n: "0123456789",
+    // o: "@&%?,=[]_:-+*$#!'^~;()/.",
+    // x: "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&*()",
+    A: "AEOBCDFGHJKMNPQRSTWXYZ",
+    a: "aeobcdfghjkmnpqrstwxyz",
+    n: "23456789",
+    o: "@&%?,=[]_:-+*#!;()/.",
+    x: "AEOaeoBCDFGHJKMNPQRSTWXYZbcdfghjkmnpqrstwxyz23456789@&%?,=[]_:-+*#!;()/.",
+    ' ': " ",
 });
 spectre.identicons = Object.freeze({
     leftArm: ["╔", "╚", "╰", "═"],

@@ -140,26 +140,28 @@ onmessage = (msg) => {
     if (msg.data.siteName && (!msg.data.userName || spectre.user.userName === msg.data.userName)) {
         let request = {
             siteName: msg.data.siteName,
-            resultType: msg.data.resultType,
+            // resultType: msg.data.resultType,
+            resultTemplate: msg.data.resultTemplate,
             keyCounter: msg.data.keyCounter || spectre.counter.default,
             keyPurpose: msg.data.keyPurpose || spectre.purpose.authentication,
             keyContext: msg.data.keyContext,
         }
-        if (!request.resultType) {
-            switch (request.keyPurpose) {
-                case spectre.purpose.authentication:
-                    request.resultType = spectre.resultType.defaultPassword;
-                    break;
-                case spectre.purpose.identification:
-                    request.resultType = spectre.resultType.defaultLogin;
-                    break;
-                case spectre.purpose.recovery:
-                    request.resultType = spectre.resultType.defaultAnswer;
-                    break;
-            }
-        }
+        // if (!request.resultType) {
+            // switch (request.keyPurpose) {
+                // case spectre.purpose.authentication:
+                    // request.resultType = spectre.resultType.defaultPassword;
+                    // break;
+                // case spectre.purpose.identification:
+                    // request.resultType = spectre.resultType.defaultLogin;
+                    // break;
+                // case spectre.purpose.recovery:
+                    // request.resultType = spectre.resultType.defaultAnswer;
+                    // break;
+            // }
+        // }
 
-        spectre.user.result(request.siteName, request.resultType, request.keyCounter, request.keyPurpose, request.keyContext).then(
+        // spectre.user.result(request.siteName, request.resultType, request.keyCounter, request.keyPurpose, request.keyContext).then(
+        spectre.user.result(request.siteName, request.resultTemplate, request.keyCounter, request.keyPurpose, request.keyContext).then(
             siteResult =>
                 postMessage({
                     ...request,

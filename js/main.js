@@ -1,3 +1,16 @@
+function tooglePasswordVisibility() {
+	var userSecretInput = document.getElementById("userSecretInput");
+	var eye = document.getElementById("togglePasswordEye");
+	if (userSecretInput.type === "password") {
+		userSecretInput.type = "text";
+		eye.classList.add("fa-eye-slash");
+	} else {
+		userSecretInput.type = "password";
+		eye.classList.remove("fa-eye-slash");
+	}
+}
+
+
 function spinnerBusy(element, busy) {
     element.data("spin", busy);
 
@@ -12,24 +25,24 @@ $(() => {
     let signOutButton = $('#signout');
     let user = $('#user');
     let userForm = user.find('form');
-    let userName = user.find('#userName');
-    let userNameInput = userName.find('input');
+    // let userName = user.find('#userName');
+    // let userNameInput = userName.find('input');
     let userSecret = user.find('#userSecret');
     let userSecretInput = userSecret.find('input');
     let userSecretSpinner = userSecret.find('.fa-spin');
-    let userAlgorithm = user.find('#algorithmVersion');
-    let userAlgorithmInput = userAlgorithm.find('select');
+    // let userAlgorithm = user.find('#algorithmVersion');
+    // let userAlgorithmInput = userAlgorithm.find('select');
     let userMessage = user.find('p.info');
     let userError = user.find('p.error');
     let site = $('#site');
     let siteForm = site.find('form');
     let siteName = site.find('#siteName');
     let siteNameInput = siteName.find('input');
-    let sitePurposeInputs = site.find('input[name="sitePurpose"]');
-    let siteCounter = site.find('#siteCounter');
-    let siteCounterInput = siteCounter.find('input');
-    let siteType = site.find('#siteType');
-    let siteTypeInput = siteType.find('select');
+    // let sitePurposeInputs = site.find('input[name="sitePurpose"]');
+    // let siteCounter = site.find('#siteCounter');
+    // let siteCounterInput = siteCounter.find('input');
+    // let siteType = site.find('#siteType');
+    // let siteTypeInput = siteType.find('select');
     let siteResult = site.find('#siteResult');
     let siteResultSpinner = siteResult.find('.fa-spin');
     let siteResultButton = siteResult.find('button');
@@ -41,38 +54,58 @@ $(() => {
         let option = document.createElement('option');
         option.text = spectre.resultName[template];
         option.value = template;
-        siteTypeInput[0].add(option);
+        // siteTypeInput[0].add(option);
     }
-    for (option of sitePurposeInputs) {
-        option.checked = option.value === spectre.purpose.authentication;
-    }
+    // for (option of sitePurposeInputs) {
+        // option.checked = option.value === spectre.purpose.authentication;
+    // }
 
     function updateDefaults() {
-        userAlgorithmInput[0].value = spectre.algorithm.current;
-        siteCounterInput[0].value = spectre.counter.initial;
+        // userAlgorithmInput[0].value = spectre.algorithm.current;
+        // siteCounterInput[0].value = spectre.counter.initial;
         
-        switch (sitePurposeInputs.filter(':checked')[0].value) {
-            case spectre.purpose.authentication: {
-                siteTypeInput[0].value = spectre.resultType.defaultPassword;
-                break;
-            }
-            case spectre.purpose.identification: {
-                siteTypeInput[0].value = spectre.resultType.defaultLogin;
-                break;
-            }
-            case spectre.purpose.recovery: {
-                siteTypeInput[0].value = spectre.resultType.defaultAnswer;
-                break;
-            }
-        }
+        // switch (sitePurposeInputs.filter(':checked')[0].value) {
+            // case spectre.purpose.authentication: {
+                // siteTypeInput[0].value = spectre.resultType.defaultPassword;
+                // break;
+            // }
+            // case spectre.purpose.identification: {
+                // siteTypeInput[0].value = spectre.resultType.defaultLogin;
+                // break;
+            // }
+            // case spectre.purpose.recovery: {
+                // siteTypeInput[0].value = spectre.resultType.defaultAnswer;
+                // break;
+            // }
+        // }
     }
 
     function updateSpectre() {
+        // spectre.request(
+            // siteNameInput[0].value,
+            // siteTypeInput[0].value,
+            // siteCounterInput[0].value,
+            // sitePurposeInputs.filter(':checked')[0].value,
+            // null //keyContext
+        // );
+		if (siteNameInput[0].validity.patternMismatch) {
+			command = "";
+		} else {
+			command = siteNameInput[0].value;
+		}
+		
+		// if (command === "") {
+			// return;
+		// }
+		
+		command_words = command.split(" ");
+		resultTemplate = command_words[0];
+		
         spectre.request(
-            siteNameInput[0].value,
-            siteTypeInput[0].value,
-            siteCounterInput[0].value,
-            sitePurposeInputs.filter(':checked')[0].value,
+            command,
+            resultTemplate,
+            1,
+            spectre.purpose.authentication,
             null //keyContext
         );
     }
@@ -81,9 +114,10 @@ $(() => {
         spinnerBusy(userSecretSpinner, spectre.operations.user.pending);
         spinnerBusy(siteResultSpinner, spectre.operations.site.pending);
 
-        userNameInput.val(spectre.operations.user.userName);
+        // userNameInput.val(spectre.operations.user.userName);
         userSecretInput.val(null);
-        siteResultInput.val(spectre.result(siteNameInput[0].value, sitePurposeInputs.filter(':checked')[0].value));
+        // siteResultInput.val(spectre.result(siteNameInput[0].value, sitePurposeInputs.filter(':checked')[0].value));
+        siteResultInput.val(spectre.result(siteNameInput[0].value, spectre.purpose.authentication));
 
         if (spectre.operations.user.authenticated) {
             user.attr("data-active", false);
@@ -92,9 +126,9 @@ $(() => {
         } else {
             user.attr("data-active", true);
             site.attr("data-active", false);
-            userAlgorithmInput.val(spectre.algorithm.current);
+            // userAlgorithmInput.val(spectre.algorithm.current);
             siteNameInput.val(null);
-            userNameInput.focus()
+            // userNameInput.focus()
         }
     }
 
@@ -104,7 +138,13 @@ $(() => {
 
     userForm.on('submit', (e) => {
         e.preventDefault();
-        spectre.authenticate(userNameInput[0].value, userSecretInput[0].value, userAlgorithmInput[0].value);
+		
+		var eye = document.getElementById("togglePasswordEye");
+		userSecretInput[0].type = "password";
+		eye.classList.remove("fa-eye-slash");
+		
+        // spectre.authenticate(userNameInput[0].value, userSecretInput[0].value, userAlgorithmInput[0].value);
+        spectre.authenticate("plop", userSecretInput[0].value, spectre.algorithm.current.v3);
     });
     siteForm.on('submit', (e) => {
         e.preventDefault()
@@ -123,14 +163,14 @@ $(() => {
     siteNameInput.on('input', () => {
         updateSpectre();
     });
-    sitePurposeInputs.on('input', () => {
-        updateDefaults();
-        updateSpectre();
-    });
-    siteCounterInput.on('input', () => {
-        updateSpectre();
-    });
-    siteTypeInput.on('input', () => {
-        updateSpectre();
-    });
+    // sitePurposeInputs.on('input', () => {
+        // updateDefaults();
+        // updateSpectre();
+    // });
+    // siteCounterInput.on('input', () => {
+        // updateSpectre();
+    // });
+    // siteTypeInput.on('input', () => {
+        // updateSpectre();
+    // });
 });
