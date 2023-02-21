@@ -1,3 +1,6 @@
+Générateur de mots de passe adapté de [spectre](https://gitlab.com/spectre.app/web) pour mes besoins personnels.
+
+
 # [Spectre](https://spectre.app)
 
 Spectre introduces a completely new way of thinking about passwords.
