@@ -1,4 +1,5 @@
 Générateur de mots de passe adapté de [spectre](https://gitlab.com/spectre.app/web) pour mes besoins personnels.
+L'appli est accessible sur https://irmo322.github.io/mdp/.
 
 
 # [Spectre](https://spectre.app)
