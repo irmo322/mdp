@@ -39,8 +39,9 @@ class SpectreUser {
     constructor(userName, userSecret, algorithmVersion = spectre.algorithm.current) {
         this.userName = userName;
         this.algorithmVersion = algorithmVersion;
-        this.identiconPromise = spectre.newIdenticon(userName, userSecret);
+        // this.identiconPromise = spectre.newIdenticon(userName, userSecret);
         this.userKeyPromise = spectre.newUserKey(userName, userSecret, algorithmVersion);
+        this.identiconPromise = spectre.newIdenticonV2(this.userKeyPromise);
 
     }
 
@@ -209,6 +210,14 @@ spectre.newSiteResult = Object.freeze(async(userKey, siteName,
         // throw new SpectreError("resultType", `Unsupported result template: ${resultType}.`);
     // }
 
+    spectre_characters = spectre.characters;
+
+    if (resultTemplate[resultTemplate.length-1] == "2") {
+        // On utilise la version sans les "O" et "o".
+        resultTemplate = resultTemplate.slice(0, resultTemplate.length-1);
+        spectre_characters = spectre.characters2;
+    }
+
     let siteKey = await spectre.newSiteKey(userKey, siteName, keyCounter, keyPurpose, keyContext)
     let siteKeyBytes = siteKey.keyData
     if (siteKey.keyAlgorithm < 1) {
@@ -225,7 +234,8 @@ spectre.newSiteResult = Object.freeze(async(userKey, siteName,
 
     // key byte 1+ selects a character from the template's character class.
     return resultTemplate.split("").map((characterClass, rT) => {
-        let characters = spectre.characters[characterClass];
+        // let characters = spectre.characters[characterClass];
+        let characters = spectre_characters[characterClass];
         return characters[siteKeyBytes[rT + 1] % characters.length];
     }).join("");
 });
@@ -243,5 +253,38 @@ spectre.newIdenticon = Object.freeze(async(userName, userSecret) => {
         "body": spectre.identicons.body[seed[0] % spectre.identicons.body.length],
         "rightArm": spectre.identicons.rightArm[seed[0] % spectre.identicons.rightArm.length],
         "accessory": spectre.identicons.accessory[seed[0] % spectre.identicons.accessory.length],
+    }
+});
+
+spectre.newIdenticonV2 = Object.freeze(async(userKeyPromise) => {
+    console.trace(`[spectre]: identiconV2`);
+
+    userKey = await userKeyPromise;
+    siteName = "osef";
+    keyCounter = spectre.counter.default;  // osef
+    keyPurpose = spectre.purpose.authentication;  // osef
+    keyContext = null;  // osef
+
+    let siteKey = await spectre.newSiteKey(userKey, siteName, keyCounter, keyPurpose, keyContext)
+    let siteKeyBytes = siteKey.keyData
+    if (siteKey.keyAlgorithm < 1) {
+        // V0 incorrectly converts bytes into 16-bit big-endian numbers.
+        let siteKeyV0Bytes = new Uint16Array(siteKeyBytes.length);
+        for (let sK = 0; sK < siteKeyV0Bytes.length; sK++) {
+            siteKeyV0Bytes[sK] = (siteKeyBytes[sK] > 127 ? 0x00ff : 0x0000) | (siteKeyBytes[sK] << 8);
+        }
+        siteKeyBytes = siteKeyV0Bytes
+    }
+
+    return {
+        "leftArm": spectre.identicons.leftArm[siteKeyBytes[1] % spectre.identicons.leftArm.length],
+        "body": spectre.identicons.body[siteKeyBytes[2] % spectre.identicons.body.length],
+        "rightArm": spectre.identicons.rightArm[siteKeyBytes[3] % spectre.identicons.rightArm.length],
+        "accessory": spectre.identicons.accessory[siteKeyBytes[4] % spectre.identicons.accessory.length],
+        "color": spectre.identicons.color[siteKeyBytes[5] % spectre.identicons.color.length],
+        "sujet": spectre.identicons.sujet[siteKeyBytes[6] % spectre.identicons.sujet.length],
+        "verbe": spectre.identicons.verbe[siteKeyBytes[7] % spectre.identicons.verbe.length],
+        "cod": spectre.identicons.cod[siteKeyBytes[8] % spectre.identicons.cod.length],
+        "coi": spectre.identicons.coi[siteKeyBytes[9] % spectre.identicons.coi.length],
     }
 });

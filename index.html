@@ -49,13 +49,17 @@
                             <!-- </p> -->
 
                             <p>
-                                <label id="userSecret">
-                                    <i class="fa-duotone fa-fw fa-user-lock"></i>
-                                    Ta phrase secrète fondamentale
-                                    <i class="fa-duotone fa-fw fa-galaxy fa-spin"></i>
-                                    <input id="userSecretInput" type="password" placeholder="N'importe quoi de long et qui se retient" autocomplete="current-password">
-									<i class="far fa-eye" id="togglePasswordEye" style="margin-left: -30px; cursor: pointer;" onclick="tooglePasswordVisibility()"></i>
-                                </label>
+                                <div id="userSecret">
+                                    <label>
+                                        <i class="fa-duotone fa-fw fa-user-lock"></i>
+                                        Ta phrase secrète fondamentale
+                                        <i class="fa-duotone fa-fw fa-galaxy fa-spin"></i>
+                                    </label>
+                                    <label style="position: relative;">
+                                        <input id="userSecretInput" type="password" placeholder="N'importe quoi de long et qui se retient" autocomplete="current-password">
+                                        <i class="far fa-eye" id="togglePasswordEye" style="position: absolute; transform: translate(50%, -50%); top: 50%; right: 30px; cursor: pointer;" onclick="tooglePasswordVisibility()"></i>
+                                    </label>
+                                </div>
                             </p>
 
                             <!-- <p> -->
@@ -92,7 +96,15 @@
             <div id="site" class="container" data-active="false">
                 <div class="row justify-content-center">
                     <div class="col-lg-6 text-center box">
-                        <i class="fa-duotone fa-globe"></i>
+                        <!-- <i class="fa-duotone fa-globe"></i> -->
+                        <div>
+                            <p>
+                                Ton cadavre exquis...
+                                <div id="identicon">
+                                </div>
+                            </p>
+                        </div>
+                        
                         <hr>
 
                         <form>
@@ -100,7 +112,7 @@
                                 <label id="siteName">
                                     <i class="fa-duotone fa-fw fa-globe"></i>
                                     Commande
-                                    <input id="siteNameInput" type="text" placeholder="AanoCVcvxxxx twitter.com compte principal" pattern="(a|A|n|o|x|C|V|c|v)+\s.*">
+                                    <input id="siteNameInput" type="text" placeholder="AanoCVcvxxxx twitter.com compte principal" pattern="(a|A|n|o|x|C|V|c|v)+(2)?\s.*">
                                 </label>
                             </p>
                             

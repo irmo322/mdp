@@ -49,6 +49,7 @@ $(() => {
     let siteResultInput = siteResultButton.find('input')
     let siteMessage = site.find('p.info');
     let siteError = site.find('p.error');
+    let identiconDiv = site.find('#identicon');
 
     for (template in spectre.templates) {
         let option = document.createElement('option');
@@ -108,6 +109,12 @@ $(() => {
             spectre.purpose.authentication,
             null //keyContext
         );
+
+        identicon = spectre.operations.user.identicon;
+        if (identicon == null) {
+            identiconDiv[0].innerHTML = "";
+            identiconDiv[0].style.color = "black";
+        }
     }
 
     function updateView() {
@@ -138,13 +145,15 @@ $(() => {
 
     userForm.on('submit', (e) => {
         e.preventDefault();
-		
-		var eye = document.getElementById("togglePasswordEye");
-		userSecretInput[0].type = "password";
-		eye.classList.remove("fa-eye-slash");
-		
-        // spectre.authenticate(userNameInput[0].value, userSecretInput[0].value, userAlgorithmInput[0].value);
-        spectre.authenticate("plop", userSecretInput[0].value, spectre.algorithm.current.v3);
+
+        if (userSecretInput[0].value != "") {
+            var eye = document.getElementById("togglePasswordEye");
+            userSecretInput[0].type = "password";
+            eye.classList.remove("fa-eye-slash");
+
+            // spectre.authenticate(userNameInput[0].value, userSecretInput[0].value, userAlgorithmInput[0].value);
+            spectre.authenticate("plop", userSecretInput[0].value, spectre.algorithm.current.v3);
+        }
     });
     siteForm.on('submit', (e) => {
         e.preventDefault()

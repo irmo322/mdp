@@ -150,6 +150,12 @@ spectre.worker.onmessage = (msg) => {
             break;
         case 'identicon':
             spectre.operations.user.identicon = msg.data.userIdenticon;
+
+            identicon = spectre.operations.user.identicon;
+            identiconDiv = document.getElementById("identicon");
+            identiconDiv.innerHTML = "<i>" + identicon["sujet"] + " " + identicon["verbe"] + " " + identicon["cod"] + " " + identicon["coi"] + "." + "</i>";
+            identiconDiv.style.color = identicon["color"];
+
             break;
         case 'user':
             spectre.operations.user.pending = false;
