@@ -21,6 +21,7 @@
         <link rel="stylesheet" href="css/spectre-base.css" media="screen">
         <link rel="stylesheet" href="css/spectre-web.css" media="screen">
         <script defer src="plugins/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="js/qrcode/qrcodegen-v1.8.0-es6.js"></script>
     </head>
 
     <body>
@@ -155,6 +156,9 @@
                                     </button>
                                 </label>
                             </p>
+
+                            <canvas id="qrcode" style="width:84px; height:84px;"></canvas>
+
                         </form>
 
                         <p class="info"></p>

@@ -124,7 +124,33 @@ $(() => {
         // userNameInput.val(spectre.operations.user.userName);
         userSecretInput.val(null);
         // siteResultInput.val(spectre.result(siteNameInput[0].value, sitePurposeInputs.filter(':checked')[0].value));
-        siteResultInput.val(spectre.result(siteNameInput[0].value, spectre.purpose.authentication));
+
+        siteResultValue = spectre.result(siteNameInput[0].value, spectre.purpose.authentication);
+        siteResultInput.val(siteResultValue);
+
+        // Dessin du qr code
+        // Adapté de https://github.com/nayuki/QR-Code-generator/issues/209
+        const canvas = document.getElementById("qrcode");
+        let ctx = canvas.getContext("2d");
+        if (siteResultValue) {
+            const qr = qrcodegen.QrCode.encodeText(siteResultValue, qrcodegen.QrCode.Ecc.LOW);
+
+            let scale = 4;
+
+            const width = qr.size * scale;
+            if (canvas.width != width) {
+                canvas.width = width;
+                canvas.height = width;
+            }
+            for (let y = 0; y < qr.size; y++) {
+              for (let x = 0; x < qr.size; x++) {
+                ctx.fillStyle = qr.getModule(x, y) ? "black" : "white";
+                ctx.fillRect(x * scale, y * scale, scale, scale);
+              }
+            }
+        } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
 
         if (spectre.operations.user.authenticated) {
             user.attr("data-active", false);
