@@ -247,7 +247,7 @@ spectre.identicons = Object.freeze({
         'Lara Croft',
         'Dora l\'exploratrice',
         'Madame Irma',
-        'Monna Lisa',
+        'Mona Lisa',
         'Ma grand-mère',
         'Ma petite soeur',
         'Le facteur',
